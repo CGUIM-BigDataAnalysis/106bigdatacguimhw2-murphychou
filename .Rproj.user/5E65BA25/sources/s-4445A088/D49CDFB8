@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527587250033.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D49CDFB8",
+    "lastKnownWriteTime" : 7449905361079002985,
+    "last_content_update" : 1527587250033,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "9D89A998",
+        "caption" : "taiwanout",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=taiwanout&cache_key=9D89A998",
+        "displayedObservations" : "35029",
+        "environment" : "",
+        "object" : "taiwanout",
+        "preview" : "0",
+        "totalObservations" : "35029",
+        "variables" : "15"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

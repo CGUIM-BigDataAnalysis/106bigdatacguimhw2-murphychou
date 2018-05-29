@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527504220471.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C892F1F5",
+    "lastKnownWriteTime" : 4914875457544201587,
+    "last_content_update" : 1527504220471,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "10A16273",
+        "caption" : "school106",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=school106&cache_key=10A16273",
+        "displayedObservations" : 154,
+        "environment" : "",
+        "object" : "school106",
+        "preview" : 0,
+        "totalObservations" : 154,
+        "variables" : 12
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

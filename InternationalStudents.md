@@ -1,6 +1,6 @@
 106-2 大數據分析方法 作業二
 ================
-Yi-Ju Tseng
+周晏輝
 
 作業完整說明[連結](https://docs.google.com/document/d/1aLGSsGXhgOVgwzSg9JdaNz2qGPQJSoupDAQownkGf_I/edit?usp=sharing)
 
@@ -13,61 +13,311 @@ Yi-Ju Tseng
 
 ``` r
 #這是R Code Chunk
+library(readr)
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+library(ggplot2)
+country103<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=25f64d5125016dcd6aed42e50c972ed0")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   洲別 = col_character(),
+    ##   國別 = col_character(),
+    ##   `學位生-正式修讀學位外國生` = col_integer(),
+    ##   `學位生-僑生(含港澳)` = col_integer(),
+    ##   `學位生-正式修讀學位陸生` = col_integer(),
+    ##   `非學位生-外國交換生` = col_integer(),
+    ##   `非學位生-外國短期研習及個人選讀` = col_integer(),
+    ##   `非學位生-大專附設華語文中心學生` = col_integer(),
+    ##   `非學位生-大陸研修生` = col_integer(),
+    ##   `非學位生-海青班` = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+country104<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=4d3e9b37b7b0fd3aa18a388cdbc77996")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   洲別 = col_character(),
+    ##   國別 = col_character(),
+    ##   `學位生-正式修讀學位外國生` = col_integer(),
+    ##   `學位生-僑生(含港澳)` = col_integer(),
+    ##   `學位生-正式修讀學位陸生` = col_integer(),
+    ##   `非學位生-外國交換生` = col_integer(),
+    ##   `非學位生-外國短期研習及個人選讀` = col_integer(),
+    ##   `非學位生-大專附設華語文中心學生` = col_integer(),
+    ##   `非學位生-大陸研修生` = col_integer(),
+    ##   `非學位生-海青班` = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+country105<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=19bedf88cf46999da12513de755c33c6")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   洲別 = col_character(),
+    ##   國別 = col_character(),
+    ##   學位生_正式修讀學位外國生 = col_integer(),
+    ##   `學位生_僑生(含港澳)` = col_integer(),
+    ##   學位生_正式修讀學位陸生 = col_integer(),
+    ##   非學位生_外國交換生 = col_integer(),
+    ##   非學位生_外國短期研習及個人選讀 = col_integer(),
+    ##   非學位生_大專附設華語文中心學生 = col_integer(),
+    ##   非學位生_大陸研修生 = col_integer(),
+    ##   非學位生_海青班 = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+country106<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=50e3370f9f8794f2054c0c82a2ed8c91")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   洲別 = col_character(),
+    ##   國別 = col_character(),
+    ##   學位生_正式修讀學位外國生 = col_integer(),
+    ##   `學位生_僑生(含港澳)` = col_integer(),
+    ##   學位生_正式修讀學位陸生 = col_integer(),
+    ##   非學位生_外國交換生 = col_integer(),
+    ##   非學位生_外國短期研習及個人選讀 = col_integer(),
+    ##   非學位生_大專附設華語文中心學生 = col_integer(),
+    ##   非學位生_大陸研修生 = col_integer(),
+    ##   非學位生_海青班 = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+colnames(country103)<-c("洲別","國別","學位生_正式修讀學位外國生","學位生_僑生(含港澳)","學位生_正式修讀學位陸生","非學位生_外國交換生","非學位生_外國短期研習及個人選讀","非學位生_大專附設華語文中心學生","非學位生_大陸研修生","非學位生_海青班","境外專班")
+colnames(country104)<-c("洲別","國別","學位生_正式修讀學位外國生","學位生_僑生(含港澳)","學位生_正式修讀學位陸生","非學位生_外國交換生","非學位生_外國短期研習及個人選讀","非學位生_大專附設華語文中心學生","非學位生_大陸研修生","非學位生_海青班","境外專班")
+countryTT<-rbind(country103,country104,country105,country106)
+for(i in 1:nrow(countryTT))
+  {
+  countryTT$sum[i]<-sum(countryTT[i,3:11])
+}
+```
+
+    ## Warning: Unknown or uninitialised column: 'sum'.
+
+``` r
+countryTT<-countryTT[order(countryTT$sum,decreasing=T),]
+
+country<-unique(countryTT$國別)
+people<-NULL
+for(i in 1:length(unique(countryTT$國別)))
+  {
+  people[i]<-sum(subset(countryTT,國別==country[i],select="sum"))
+  }
+
+school103<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=a6d1469f39fe41fb81dbfc373aef3331")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   學校類型 = col_character(),
+    ##   學校代碼 = col_character(),
+    ##   學校名稱 = col_character(),
+    ##   `學位生-正式修讀學位外國生` = col_integer(),
+    ##   `學位生-僑生(含港澳)` = col_integer(),
+    ##   `學位生-正式修讀學位陸生` = col_integer(),
+    ##   `非學位生-外國交換生` = col_integer(),
+    ##   `非學位生-外國短期研習及個人選讀` = col_integer(),
+    ##   `非學位生-大專附設華語文中心學生` = col_integer(),
+    ##   `非學位生-大陸研修生` = col_character(),
+    ##   `非學位生-海青班` = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+school104<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=8baeae81cba74f35cf0bb1333d3d99f5")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   學校類型 = col_character(),
+    ##   學校代碼 = col_character(),
+    ##   學校名稱 = col_character(),
+    ##   `學位生-正式修讀學位外國生` = col_integer(),
+    ##   `學位生-僑生(含港澳)` = col_integer(),
+    ##   `學位生-正式修讀學位陸生` = col_integer(),
+    ##   `非學位生-外國交換生` = col_integer(),
+    ##   `非學位生-外國短期研習及個人選讀` = col_integer(),
+    ##   `非學位生-大專附設華語文中心學生` = col_integer(),
+    ##   `非學位生-大陸研修生` = col_character(),
+    ##   `非學位生-海青班` = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+school105<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=1a485383cf9995da679c3798ab4fd681")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   學校類型 = col_character(),
+    ##   學校代碼 = col_character(),
+    ##   學校名稱 = col_character(),
+    ##   學位生_正式修讀學位外國生 = col_integer(),
+    ##   `學位生_僑生(含港澳)` = col_integer(),
+    ##   學位生_正式修讀學位陸生 = col_integer(),
+    ##   非學位生_外國交換生 = col_integer(),
+    ##   非學位生_外國短期研習及個人選讀 = col_integer(),
+    ##   非學位生_大專附設華語文中心學生 = col_integer(),
+    ##   非學位生_大陸研修生 = col_integer(),
+    ##   非學位生_海青班 = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+school106<-read_csv("https://quality.data.gov.tw/dq_download_csv.php?nid=6289&md5_url=883e2ab4d5357f70bea9ac44a47d05cc")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   學校類型 = col_character(),
+    ##   學校代碼 = col_character(),
+    ##   學校名稱 = col_character(),
+    ##   學位生_正式修讀學位外國生 = col_integer(),
+    ##   `學位生_僑生(含港澳)` = col_integer(),
+    ##   學位生_正式修讀學位陸生 = col_integer(),
+    ##   非學位生_外國交換生 = col_integer(),
+    ##   非學位生_外國短期研習及個人選讀 = col_integer(),
+    ##   非學位生_大專附設華語文中心學生 = col_integer(),
+    ##   非學位生_大陸研修生 = col_integer(),
+    ##   非學位生_海青班 = col_integer(),
+    ##   境外專班 = col_integer()
+    ## )
+
+``` r
+colnames(school103)<-c("學校類型","學校代碼","學校名稱","學位生_正式修讀學位外國生","學位生_僑生(含港澳)","學位生_正式修讀學位陸生","非學位生_外國交換生","非學位生_外國短期研習及個人選讀","非學位生_大專附設華語文中心學生","非學位生_大陸研修生","非學位生_海青班","境外專班")
+colnames(school104)<-c("學校類型","學校代碼","學校名稱","學位生_正式修讀學位外國生","學位生_僑生(含港澳)","學位生_正式修讀學位陸生","非學位生_外國交換生","非學位生_外國短期研習及個人選讀","非學位生_大專附設華語文中心學生","非學位生_大陸研修生","非學位生_海青班","境外專班")
+
+schoolTT<-rbind(school103,school104,school105,school106)
+
+schoolTT$非學位生_大陸研修生<-gsub("…","0",schoolTT$非學位生_大陸研修生)
+schoolTT$非學位生_大陸研修生<-as.numeric(schoolTT$非學位生_大陸研修生)
+
+for(i in 1:nrow(schoolTT))
+  {
+  schoolTT$sum[i]<-sum(schoolTT[i,4:12])
+  }
+```
+
+    ## Warning: Unknown or uninitialised column: 'sum'.
+
+``` r
+schoolTT<-schoolTT[order(schoolTT$sum,decreasing=T),]
+schoolTT<-schoolTT[-1:-3,]
+school<-unique(schoolTT$學校名稱)
+people2<-NULL
+for(i in 1:length(unique(schoolTT$學校名稱))){
+  people2[i]<-sum(subset(schoolTT,學校名稱==school[i],select="sum"))
+}
 ```
 
 ### 哪些國家來台灣唸書的學生最多呢？
 
 ``` r
 #這是R Code Chunk
-head(iris)
+knitr::kable(head(country,10))
 ```
 
-    ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-    ## 1          5.1         3.5          1.4         0.2  setosa
-    ## 2          4.9         3.0          1.4         0.2  setosa
-    ## 3          4.7         3.2          1.3         0.2  setosa
-    ## 4          4.6         3.1          1.5         0.2  setosa
-    ## 5          5.0         3.6          1.4         0.2  setosa
-    ## 6          5.4         3.9          1.7         0.4  setosa
+| x        |
+|:---------|
+| 中國大陸 |
+| 馬來西亞 |
+| 香港     |
+| 日本     |
+| 越南     |
+| 印尼     |
+| 澳門     |
+| 南韓     |
+| 美國     |
+| 泰國     |
 
 ``` r
-knitr::kable(head(iris))
+knitr::kable(head(people,10))
 ```
 
-|  Sepal.Length|  Sepal.Width|  Petal.Length|  Petal.Width| Species |
-|-------------:|------------:|-------------:|------------:|:--------|
-|           5.1|          3.5|           1.4|          0.2| setosa  |
-|           4.9|          3.0|           1.4|          0.2| setosa  |
-|           4.7|          3.2|           1.3|          0.2| setosa  |
-|           4.6|          3.1|           1.5|          0.2| setosa  |
-|           5.0|          3.6|           1.4|          0.2| setosa  |
-|           5.4|          3.9|           1.7|          0.4| setosa  |
-
-``` r
-library(knitr)
-kable(head(iris))
-```
-
-|  Sepal.Length|  Sepal.Width|  Petal.Length|  Petal.Width| Species |
-|-------------:|------------:|-------------:|------------:|:--------|
-|           5.1|          3.5|           1.4|          0.2| setosa  |
-|           4.9|          3.0|           1.4|          0.2| setosa  |
-|           4.7|          3.2|           1.3|          0.2| setosa  |
-|           4.6|          3.1|           1.5|          0.2| setosa  |
-|           5.0|          3.6|           1.4|          0.2| setosa  |
-|           5.4|          3.9|           1.7|          0.4| setosa  |
+|       x|
+|-------:|
+|  152524|
+|   62031|
+|   31940|
+|   28200|
+|   21670|
+|   19620|
+|   20302|
+|   16948|
+|   14846|
+|    7035|
 
 ### 哪間大學的境外生最多呢？
 
 ``` r
 #這是R Code Chunk
+knitr::kable(head(school,10))
 ```
+
+| x                |
+|:-----------------|
+| 國立臺灣師範大學 |
+| 國立臺灣大學     |
+| 銘傳大學         |
+| 中國文化大學     |
+| 淡江大學         |
+| 國立成功大學     |
+| 國立政治大學     |
+| 中原大學         |
+| 逢甲大學         |
+| 輔仁大學         |
+
+``` r
+knitr::kable(head(people2,10))
+```
+
+|      x|
+|------:|
+|  22113|
+|  18199|
+|  16057|
+|  16074|
+|  13887|
+|  10982|
+|  11626|
+|   7662|
+|   9474|
+|   9499|
 
 ### 各個國家來台灣唸書的學生人數條狀圖
 
 ``` r
 #這是R Code Chunk
+library(ggplot2)
+countryDF<-data.frame(國別=country,
+                        人數=people)
+ggplot()+geom_bar(data=countryDF,aes(國別,人數),stat = "identity")
 ```
+
+![](InternationalStudents_files/figure-markdown_github/ToTWNCountryBar-1.png)
 
 ### 各個國家來台灣唸書的學生人數面量圖
 
@@ -82,25 +332,105 @@ kable(head(iris))
 
 ``` r
 #這是R Code Chunk
+aboard<-read_csv("D:Student_RPT_07.csv",skip=2)
 ```
+
+    ## Warning: Missing column names filled in: 'X1' [1], 'X2' [2], 'X7' [7],
+    ## 'X8' [8], 'X9' [9], 'X10' [10]
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   X1 = col_integer(),
+    ##   X2 = col_integer(),
+    ##   設立別 = col_character(),
+    ##   學校類別 = col_character(),
+    ##   學校代碼 = col_character(),
+    ##   學校名稱 = col_character(),
+    ##   X7 = col_integer(),
+    ##   X8 = col_character(),
+    ##   X9 = col_character(),
+    ##   X10 = col_character(),
+    ##   中文名稱 = col_character(),
+    ##   英文名稱 = col_character(),
+    ##   小計 = col_integer(),
+    ##   男 = col_integer(),
+    ##   女 = col_integer()
+    ## )
+
+    ## Warning in rbind(names(probs), probs_f): number of columns of result is not
+    ## a multiple of vector length (arg 1)
+
+    ## Warning: 10 parsing failures.
+    ## row # A tibble: 5 x 5 col     row col   expected               actual                         file   expected   <int> <chr> <chr>                  <chr>                          <chr>  actual 1 23579 X7    no trailing characters A2                             'D:St~ file 2 34284 X7    no trailing characters A2                             'D:St~ row 3 35022 X1    an integer             蝯梯?隤芣?嚗?                  'D:St~ col 4 35023 X1    no trailing characters ". ?祈”閮剔??乩??\uf2e7\u0080\ue4~ 'D:St~ expected 5 35024 X1    no trailing characters ". ?祈”?\uf5fa飛?嗚\u0080\uf696?~ 'D:St~
+    ## ... ................. ... .......................................................................... ........ .......................................................................... ...... .......................................................................... .... .......................................................................... ... ..................................................................... ... .......................................................................... ........ ..........................................................................
+    ## See problems(...) for more details.
 
 ### 台灣大專院校的學生最喜歡去哪些國家進修交流呢？
 
 ``` r
 #這是R Code Chunk
+library(readr)
+library(dplyr)
+colnames(aboard)<- c("年度","學期","設立別","學校類別","學校代碼","學校名稱","系所代碼","系所名稱","學制","國別(地區)","對方學校(機構)名稱","英文名稱","小計","男","女")
+group_by(aboard,`國別(地區)`)%>%
+  summarise(人數=n())%>%
+  arrange(desc(人數))%>%
+  head(10)
 ```
+
+    ## # A tibble: 10 x 2
+    ##    `國別(地區)`      人數
+    ##    <chr>            <int>
+    ##  1 日本              6160
+    ##  2 中國大陸          5702
+    ##  3 美國              4709
+    ##  4 大陸地區          2938
+    ##  5 南韓              1699
+    ##  6 法國              1671
+    ##  7 大韓民國(南韓)    1232
+    ##  8 德國              1142
+    ##  9 德意志聯邦共和國   904
+    ## 10 英國               773
 
 ### 哪間大學的出國交流學生數最多呢？
 
 ``` r
 #這是R Code Chunk
+group_by(aboard,學校名稱)%>%
+  summarise(人數=n())%>%
+  arrange(desc(人數))%>%
+  head(10)
 ```
+
+    ## # A tibble: 10 x 2
+    ##    學校名稱          人數
+    ##    <chr>            <int>
+    ##  1 國立臺灣大學      3548
+    ##  2 國立政治大學      2984
+    ##  3 淡江大學          1208
+    ##  4 國立交通大學      1197
+    ##  5 國立清華大學      1059
+    ##  6 國立成功大學      1058
+    ##  7 國立臺灣師範大學  1037
+    ##  8 東海大學           984
+    ##  9 逢甲大學           977
+    ## 10 輔仁大學           810
 
 ### 台灣大專院校的學生最喜歡去哪些國家進修交流條狀圖
 
 ``` r
 #這是R Code Chunk
+library(ggplot2)
+library(dplyr)
+collegedf<-group_by(aboard,`國別(地區)`)%>%
+  summarise(人數=n())%>%
+  arrange(desc(人數))%>%
+  head(10)
+
+ggplot()+geom_bar(data=collegedf,aes(`國別(地區)`,人數),stat = "identity")
 ```
+
+![](InternationalStudents_files/figure-markdown_github/FromTWNCountryBar-1.png)
 
 ### 台灣大專院校的學生最喜歡去哪些國家進修交流面量圖
 
@@ -115,13 +445,48 @@ kable(head(iris))
 
 ``` r
 #這是R Code Chunk
+taiwan<-read_csv("https://ws.moe.edu.tw/Download.ashx?u=C099358C81D4876CC7586B178A6BD6D5062C39FB76BDE7EC7685C1A3C0846BCDD2B4F4C2FE907C3E7E96F97D24487065577A728C59D4D9A4ECDFF432EA5A114C8B01E4AFECC637696DE4DAECA03BB417&n=4E402A02CE6F0B6C1B3C7E89FDA1FAD0B5DDFA6F3DA74E2DA06AE927F09433CFBC07A1910C169A1845D8EB78BD7D60D7414F74617F2A6B71DC86D17C9DA3781394EF5794EEA7363C&icon=..csv")
 ```
+
+    ## Warning: Missing column names filled in: 'X4' [4], 'X5' [5], 'X6' [6]
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   洲別 = col_character(),
+    ##   國別 = col_character(),
+    ##   總人數 = col_number(),
+    ##   X4 = col_character(),
+    ##   X5 = col_character(),
+    ##   X6 = col_character()
+    ## )
 
 ### 台灣學生最喜歡去哪些國家留學呢？
 
 ``` r
 #這是R Code Chunk
+library(readr)
+library(dplyr)
+taiwan$X4<-NULL
+taiwan$X5<-NULL
+taiwan$X6<-NULL
+arrange(taiwan,desc(總人數))%>%
+  select("國別")%>%
+  head(10)
 ```
+
+    ## # A tibble: 10 x 1
+    ##    國別    
+    ##    <chr>   
+    ##  1 美國    
+    ##  2 澳大利亞
+    ##  3 日本    
+    ##  4 加拿大  
+    ##  5 英國    
+    ##  6 德國    
+    ##  7 紐西蘭  
+    ##  8 波蘭    
+    ##  9 馬來西亞
+    ## 10 奧地利
 
 ### 台灣學生最喜歡去哪些國家留學面量圖
 
