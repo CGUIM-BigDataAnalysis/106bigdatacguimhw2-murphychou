@@ -2,18 +2,18 @@
     "collab_server" : "",
     "contents" : "",
     "created" : 1527500865671.000,
-    "dirty" : false,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
     "hash" : "0",
     "id" : "B18E907A",
     "lastKnownWriteTime" : 1527589857,
-    "last_content_update" : 1527589857267,
+    "last_content_update" : 1527590463325,
     "path" : "~/GitHub/106bigdatacguimhw2-murphychou/InternationalStudents.Rmd",
     "project_path" : "InternationalStudents.Rmd",
     "properties" : {
-        "cursorPosition" : "82,3",
-        "scrollLine" : "67"
+        "cursorPosition" : "176,35",
+        "scrollLine" : "153"
     },
     "relative_order" : 1,
     "source_on_save" : false,
